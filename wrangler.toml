@@ -1,0 +1,6 @@
+name = "supabase-cloudflare-kv"
+main = "src/index.js"
+compatibility_date = "2022-09-21"
+kv_namespaces = [
+  { binding = "ARTICLES", id = "89ff352943ae4869b5d9de28f3355efa", preview_id = "7aad0b2831f640aebb3aa1cb74c3695b" }
+]
