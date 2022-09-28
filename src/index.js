@@ -18,6 +18,7 @@ const router = new Router();
 router.get(
   "/articles",
   async (request, { SUPABASE_URL, SUPABASE_ANON_KEY, ARTICLES }) => {
+    // console.log({SUPABASE_ANON_KEY, SUPABASE_URL});
     const cachedArticles = await readFrom(ARTICLES, "/articles");
     if (cachedArticles) {
       // console.log('returning cached articles');
@@ -68,6 +69,23 @@ router.get("/read-kv", async (request, { ARTICLES }) => {
   return json(articles);
 });
 
+router.post('/article', withContent, async(request, { SUPABASE_URL, SUPABASE_ANON_KEY, ARTICLES }, context) => {
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  const { title, content } = request.content;
+
+  const { data, error } = await supabase.from("articles").insert({
+    title,
+    content,
+  });
+
+  if(error) {
+    return status(500, "Oh snap.");
+  }
+
+  return json(data)
+})
+
 router.post(
   "/revalidate",
   withContent,
@@ -93,8 +111,23 @@ router.post(
   }
 );
 
+router.get('/weather',  async (request, { WEATHER }) => {
+  // const articles = await write(ARTICLES, "/articles");
+  // return json(articles);
+  const weather = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.4691&longitude=-70.6420&current_weather=true')
+  const { current_weather } = await weather.json();
+  await writeTo(WEATHER, "/weather", current_weather);
+  return json({current_weather})
+});
+
 router.all("*", () => status(404, "Not found"));
 
 export default {
   fetch: router.handle,
+  async scheduled(args) {
+    const weather = await fetch('https://api.open-meteo.com/v1/forecast?latitude=-33.4691&longitude=-70.6420&current_weather=true')
+    const { current_weather } = await weather.json();
+    
+    console.log(current_weather);
+  }
 };
