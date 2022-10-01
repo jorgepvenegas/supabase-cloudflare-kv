@@ -2,9 +2,5 @@ name = "supabase-cloudflare-kv"
 main = "src/index.js"
 compatibility_date = "2022-09-21"
 kv_namespaces = [
-  { binding = "ARTICLES", id = "89ff352943ae4869b5d9de28f3355efa", preview_id = "7aad0b2831f640aebb3aa1cb74c3695b" },
-  { binding = "WEATHER", id = "ac2ea8857dcf4f5196760c0b83f6fb09", preview_id = "5ca9b4d1d46d459db035b122ac7d6b65" }
+  { binding = "WEATHER", id = "8226b093883240fa8d6d83fb4e223cde", preview_id = "0c2f6d6f042349f8b39729629d15d3b6" }
 ]
-
-[triggers]
-crons = [ "*/1 * * * *" ]
